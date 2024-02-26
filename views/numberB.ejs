@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+       body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+form {
+    text-align: center;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    background-color: #860e29;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #A82C48;
+}
+
+.result-box {
+    margin-top: 20px;
+}
+
+/* Navbar Styles */
+.navigation-wrap {
+    background-color: #A82C48;
+}
+
+.navbar-brand img {
+    max-height: 50px;
+}
+
+.navbar-nav .nav-link {
+    color: #fff !important;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffc107 !important;
+}
+
+.btn-primary {
+    background-color: #A82C48;
+    border-color: #A82C48;
+}
+
+.btn-primary:hover {
+    background-color: #860e29;
+    border-color: #860e29;
+}
+
+.modal-content {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.modal-open .modal {
+    overflow-y: auto;
+}
+.custom-light {
+    color: #f0f0f0; 
+}
+
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .weather-info {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.weather-info p {
+    margin-bottom: 10px;
+    display: block;
+}
+
+
+        #map {
+            height: 300px;
+            margin-top: 30px;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        footer {
+            background-color: #A82C48;
+            color: #fff;
+            padding: 0px 0;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .book-container {
+            width: calc(25% - 20px); /* Adjusted width */
+            margin: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .book-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .book-container:hover .book-description {
+            display: block;
+        }
+
+        .book-description {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .book-description h5 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark navigation-wrap">
+            <div class="container">
+               
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="fas fa-home custom-light nav-link" href="/admin/<%= userId %>"></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/weather/<%= userId %>">Weather</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/number/<%= userId %>">Book Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Translate</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/history/<%= userId %>">History</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-5">
+        <h1>Book Search</h1>
+        <form id="book-search-form">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="text" id="search-input" class="form-control" placeholder="Enter book title">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="row mt-5" id="books-container">
+            <!-- Book containers will be dynamically added here -->
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            loadBooks();
+
+            $('#book-search-form').submit(function (event) {
+                event.preventDefault();
+                let searchInput = $('#search-input').val();
+                // Perform API request to search for books using searchInput
+                $.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=I5WsxbEJ3SjQZyLcicEAN2ncroFh6GR5`, function (response) {
+                    let books = response.results.books;
+                    if (searchInput.trim() === '') {
+                        displayBooks(books.slice(0, 16));
+                    } else {
+                        let filteredBooks = books.filter(book => book.title.toLowerCase().includes(searchInput.toLowerCase()));
+                        displayBooks(filteredBooks);
+                    }
+                });
+            });
+
+            function loadBooks() {
+                $.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=I5WsxbEJ3SjQZyLcicEAN2ncroFh6GR5`, function (response) {
+                    let books = response.results.books;
+                    displayBooks(books.slice(0, 16));
+                });
+            }
+
+            function displayBooks(books) {
+                let booksContainer = $('#books-container');
+                booksContainer.empty();
+                books.forEach(function (book) {
+                    let bookContainer = $('<div>').addClass('book-container col-md-3');
+                    let image = $('<img>').addClass('book-image').attr('src', book.book_image).attr('alt', book.title);
+                    let description = $('<div>').addClass('book-description');
+                    description.html(`<h5>${book.title}</h5><p>${book.description}</p>`);
+                    bookContainer.append(image, description);
+                    booksContainer.append(bookContainer);
+                });
+            }
+        });
+    </script>
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</body>
+
+<footer>
+    <div class="container">
+        <p>Dinmukhammed Mynzhasar | SE-2207</p>
+    </div>
+</footer>
+
+</html>
