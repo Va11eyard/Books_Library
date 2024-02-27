@@ -199,15 +199,12 @@ button[type="submit"]:hover {
         }
 
         .book-description {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
+            /*display: none;*/
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background: #e1e1e1;
             border-radius: 10px;
-            color: #fff;
+            color: #000;
             padding: 20px;
         }
 
@@ -228,7 +225,7 @@ button[type="submit"]:hover {
         <nav class="navbar navbar-expand-lg navigation-wrap">
             <div class="container">
                 <li class="nav-item">
-                    <a class="fas fa-home custom-light nav-link" href="/views/login.ejs"></a>
+                    <a class="fas fa-home custom-light nav-link" href="/admin/<%= userId %>"></a>
                 </li>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -276,14 +273,14 @@ button[type="submit"]:hover {
                 event.preventDefault();
                 let searchInput = $('#search-input').val();
                 // Perform API request to search for books using searchInput
-                $.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=I5WsxbEJ3SjQZyLcicEAN2ncroFh6GR5`, function (response) {
-                    let books = response.results.books;
-                    if (searchInput.trim() === '') {
+                $.get(`https://api.nytimes.com/svc/books/v3/lists/best-sellers/history.json?api-key=I5WsxbEJ3SjQZyLcicEAN2ncroFh6GR5&title=${searchInput}`, function (response) {
+                    let books = response.results;
+                    // if (searchInput.trim() === '') {
                         displayBooks(books.slice(0, 16));
-                    } else {
-                        let filteredBooks = books.filter(book => book.title.toLowerCase().includes(searchInput.toLowerCase()));
-                        displayBooks(filteredBooks);
-                    }
+                    // } else {
+                    //     let filteredBooks = books.filter(book => book.title.toLowerCase().includes(searchInput.toLowerCase()));
+                    //     displayBooks(filteredBooks);
+                    // }
                 });
             });
 
@@ -296,13 +293,14 @@ button[type="submit"]:hover {
 
             function displayBooks(books) {
                 let booksContainer = $('#books-container');
+                console.log(booksContainer, books);
                 booksContainer.empty();
                 books.forEach(function (book) {
                     let bookContainer = $('<div>').addClass('book-container col-md-3');
                     let image = $('<img>').addClass('book-image').attr('src', book.book_image).attr('alt', book.title);
                     let description = $('<div>').addClass('book-description');
                     description.html(`<h5>${book.title}</h5><p>${book.description}</p>`);
-                    bookContainer.append(image, description);
+                    bookContainer.append( description);
                     booksContainer.append(bookContainer);
                 });
             }
