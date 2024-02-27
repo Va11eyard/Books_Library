@@ -1,7 +1,7 @@
 ## Deploy
 # https://assignment3-sloo.onrender.com
 
-A web application that provides weather information, a translator, and interesting facts about numbers. The application was created using Node.js, Express and integrates with external APIs to get data.
+A web application that provides Weather information, a Translator, the The New York Times Best Sellers lists and Dictionary for Word. The application was created using Node.js, Express and integrates with external APIs to get data.
 
 ## Prerequisites
 
@@ -57,16 +57,19 @@ A web application that provides weather information, a translator, and interesti
   - Enter any city name to retrieve relevant weather data.
 - **Translator:**
   - Allows you to translate a word to another language.
-- **Fun Fact about Number:**
-  - Provides interesting fact about your chosen number.
+- **The New York Times bestsellers:**
+  - Provides information about book reviews and The New York Times Best Sellers lists.
 - **Dictionary** - Enter any word and choose language, after get a meaning of word.
+
+##
+**Note that Weather information and Translator is just additional APIs which has nothing to do with requierments, while Books and Dictionary is APIs about my theme.** 
 
 ## Admin information:
 - username: Dinmukhammed
 - password: Dinmukhammed2207
 
 ## Admin page:
-In order to get access to the admin page use this: https://assignment3-sloo.onrender.com/admin/65ca5a4c1acba6b9537cc277 
+**In order to get access to the admin page click the button with house icon** 
 
 ## Dependencies
 - **Express:** Used for server setup and routing.
@@ -76,9 +79,9 @@ In order to get access to the admin page use this: https://assignment3-sloo.onre
 - **Nodemon:** Monitors for changes and automatically restarts the server.
 
 ## APIs Used
-- **OpenWeatherMap API** - For weather data.
+- **OpenWeatherMap API** - for weather data.
 - **Google Cloud Translate API** - to translate text into certain languages.
-- **Numbersapi** - to get interesting facts about the numbers.
+- **Books API** - the Books API provides information about book reviews and The New York Times Best Sellers lists.
 - **Yandex dictionary** - to get meaning of words in another languages
 
 
