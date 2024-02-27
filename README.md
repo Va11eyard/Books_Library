@@ -1,5 +1,5 @@
 ## Deploy
-# https://assignment3-sloo.onrender.com
+# https://books-library-5v9s.onrender.com
 
 A web application that provides Weather information, a Translator, the The New York Times Best Sellers lists and Dictionary for Word. The application was created using Node.js, Express and integrates with external APIs to get data.
 
@@ -37,13 +37,13 @@ A web application that provides Weather information, a Translator, the The New Y
 │   │   ├── routes.js
 │   ├── views/  [Contains client-side files (ejs)]
 │   │   ├── admin.ejs
+│   │   ├── dictionary.ejs
 │   │   ├── history.ejs
 │   │   ├── login.js
 │   │   ├── number.ejs
 │   │   ├── register.ejs
 │   │   ├── translate.js
 │   │   ├── weather.ejs
-│   │   ├── dictionary.ejs
 │   ├── README.md
 │   ├── package-lock.json
 │   ├── package.json
@@ -59,7 +59,8 @@ A web application that provides Weather information, a Translator, the The New Y
   - Allows you to translate a word to another language.
 - **The New York Times bestsellers:**
   - Provides information about book reviews and The New York Times Best Sellers lists.
-- **Dictionary** - Enter any word and choose language, after get a meaning of word.
+- **Dictionary:**
+  - Enter any word and choose language, after get a meaning of word.
 
 ##
 **Note that Weather information and Translator is just additional APIs which has nothing to do with requierments, while Books and Dictionary is APIs about my theme.** 
