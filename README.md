@@ -63,7 +63,7 @@ A web application that provides Weather information, a Translator, the The New Y
   - Enter any word and choose language, after get a meaning of word.
 
 ##
-**Note that Weather information and Translator is just additional APIs which has nothing to do with requierments, while Books and Dictionary is APIs about my theme.** 
+**Note that Weather information and Translator is just additional APIs which has nothing to do with requirements, while Books and Dictionary is APIs about my theme.** 
 
 ## Admin information:
 - username: Dinmukhammed
