@@ -43,7 +43,7 @@ A web application that provides weather information, a translator, and interesti
 │   │   ├── register.ejs
 │   │   ├── translate.js
 │   │   ├── weather.ejs
-│   │   ├── вшсешщтфкн.ejs
+│   │   ├── dictionary.ejs
 │   ├── README.md
 │   ├── package-lock.json
 │   ├── package.json
