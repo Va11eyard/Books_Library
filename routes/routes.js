@@ -15,23 +15,23 @@ router.get('/', (req, res) => {
     res.render('register');
 });
 
-router.get('/login', (req, res)=>{
+router.get('/login', (req, res) => {
     res.render('login');
 })
 
 router.post('/register', async (req, res) => {
-    const { username, password } = req.body;
+    const {username, password} = req.body;
     try {
-        const existingUser = await User.findOne({ username });
+        const existingUser = await User.findOne({username});
         if (existingUser) {
-            res.render("register.ejs", { errorMessage: "Username already exists" });
+            res.render("register.ejs", {errorMessage: "Username already exists"});
             return;
         }
         let isAdmin = false;
         if (username === "Dinmukhammed" && password === "Dinmukhammed2207") {
             isAdmin = true;
         }
-        const newUser = new User({ username, password, isAdmin });
+        const newUser = new User({username, password, isAdmin});
         await newUser.save();
         req.session.userId = newUser._id;
         res.redirect(`/weather/${newUser._id}`);
@@ -42,9 +42,9 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const {username, password} = req.body;
     try {
-        const user = await User.findOne({ username, password });
+        const user = await User.findOne({username, password});
         if (user) {
             req.session.userId = user._id;
             res.redirect(`/weather/${user._id}`);
@@ -57,12 +57,12 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/weather/:userId', async( req, res)=>{
+router.get('/weather/:userId', async (req, res) => {
     try {
         res.render("weather", {
             userId: req.params.userId,
             weatherData: null
-        }); 
+        });
     } catch (error) {
         console.error(error);
         res.status(500).send("Error fetching weather data");
@@ -73,17 +73,17 @@ router.post('/weather/:userId', async (req, res) => {
     try {
         const apiKey = '16d311977fced07064aa910221a6b04c';
         const city = req.body.city;
-        const userId = req.params.userId; 
+        const userId = req.params.userId;
         if (!city) {
-            return res.status(400).json({ error: 'Не указан город в запросе' });
+            return res.status(400).json({error: 'Не указан город в запросе'});
         }
 
         if (!userId) {
-            return res.status(400).json({ error: 'Invalid user ID' });
+            return res.status(400).json({error: 'Invalid user ID'});
         }
 
         const weatherData = await fetchWeatherData(city, apiKey);
-        const newWeatherData = await saveWeatherData(userId, weatherData); 
+        const newWeatherData = await saveWeatherData(userId, weatherData);
 
         res.render("weather", {
             userId: req.params.userId,
@@ -139,7 +139,7 @@ async function saveWeatherData(userId, weatherData) {
 
 router.get('/number/:userId', async (req, res) => {
     try {
-        res.render("number", { userId: req.params.userId, fact: null });
+        res.render("number", {userId: req.params.userId, fact: null});
     } catch (error) {
         console.error(error);
         res.status(500).send("Error rendering number view");
@@ -151,14 +151,14 @@ router.post('/number/:userId', async (req, res) => {
         const userId = req.params.userId;
         const number = req.body.number;
         const response = await axios.get(`http://numbersapi.com/${number}`);
-        
-        const newNumber =  await Number.create({
+
+        const newNumber = await Number.create({
             userId: userId,
             number: number,
             fact: response.data
         });
 
-        res.render('number', { userId: userId, fact: response.data });
+        res.render('number', {userId: userId, fact: response.data});
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -167,7 +167,7 @@ router.post('/number/:userId', async (req, res) => {
 
 router.get('/translate/:userId', async (req, res) => {
     try {
-        res.render("translate", { userId: req.params.userId, translatedText: null });
+        res.render("translate", {userId: req.params.userId, translatedText: null});
     } catch (error) {
         console.error(error);
         res.status(500).send("Error rendering number view");
@@ -176,7 +176,7 @@ router.get('/translate/:userId', async (req, res) => {
 
 router.post('/translate/:userId', async (req, res) => {
     const userId = req.params.userId;
-    const { text, targetLanguage } = req.body;
+    const {text, targetLanguage} = req.body;
     try {
         if (!text || !targetLanguage) {
             return res.status(400).send('Missing text or target language');
@@ -191,57 +191,103 @@ router.post('/translate/:userId', async (req, res) => {
         });
         await newTranslation.save();
 
-        res.render('translate', { userId: userId, translatedText: translation }); 
+        res.render('translate', {userId: userId, translatedText: translation});
     } catch (error) {
         console.error('Error translating text:', error);
         res.status(500).send('Error translating text');
     }
 });
 
-router.get('/history/:userId', async (req, res) =>{
+router.get('/dictionary/:userId', async (req, res) => {
     try {
-        const userId = req.params.userId;
+        res.render("dictionary", {userId: req.params.userId, translationData: null});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error rendering number view");
+    }
+});
 
-        const WeatherDataHistory = await WeatherData.find({user: userId})
-        const NumberHistory = await Number.find({userId: userId})
-        const TranslationHistory = await Translation.find({userId: userId})
-        const history = {
-            WeatherDataHistory,
-            NumberHistory,
-            TranslationHistory
-        };
-        const user = await User.findById(userId);
-        res.render('history', { userId: userId, user: user,  history: history });
-    
-      } catch (error) {
-        console.error('Error getting history:', error);
-        res.status(500).send('Internal Server Error');
-      }
-})
+router.post('/dictionary/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const key = 'dict.1.1.20240227T112307Z.cfcec54ad8ce6dd6.742e20b1de96c8a01890132a9fb036a002687936';
+
+    const {text, lang} = req.body;
+
+    if (!lang || !text) {
+        res.render('dictionary', {userId: userId, translationData: null});
+        return;
+    }
+
+    try {
+        const apiUrl = `https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=${key}&lang=${lang}&text=${text}`;
+
+        const {data} = await axios.get(apiUrl);
+        const def = data.def;
+
+        if (def && def.length > 0) {
+            const translationData = def.map((entry) => {
+                return {
+                    text: entry.text,
+                    pos: entry.pos,
+                    translation: entry.tr.map((trEntry) => trEntry.text).join(', '),
+                };
+            });
+
+            res.render('dictionary', {userId: userId, translationData, translationText: text});
+        } else {
+            res.render('dictionary', {userId: userId, translationData: null});
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error rendering number view");
+    }
+
+});
+
+// router.get('/history/:userId', async (req, res) =>{
+//     try {
+//         const userId = req.params.userId;
+//
+//         const WeatherDataHistory = await WeatherData.find({user: userId})
+//         const NumberHistory = await Number.find({userId: userId})
+//         const TranslationHistory = await Translation.find({userId: userId})
+//         const history = {
+//             WeatherDataHistory,
+//             NumberHistory,
+//             TranslationHistory
+//         };
+//         const user = await User.findById(userId);
+//         res.render('history', { userId: userId, user: user,  history: history });
+//
+//       } catch (error) {
+//         console.error('Error getting history:', error);
+//         res.status(500).send('Internal Server Error');
+//       }
+// })
 const isAdmin = async (req, res, next) => {
     const userId = req.params.userId;
     try {
-      const user = await User.findById(userId);
-  
-      console.log(user)
-      if (user && user.isAdmin) {
-        next();
-      } else {
-        res.status(403).send('Access forbidden. Only administrators can access this page.');
-      }
+        const user = await User.findById(userId);
+
+        console.log(user)
+        if (user && user.isAdmin) {
+            next();
+        } else {
+            res.status(403).send('Access forbidden. Only administrators can access this page.');
+        }
     } catch (error) {
-      console.error('Ошибка при поиске пользователя:', error);
-      res.status(500).send('Internal Server Error');
+        console.error('Ошибка при поиске пользователя:', error);
+        res.status(500).send('Internal Server Error');
     }
-  };
+};
 
 
-router.get('/admin/:userId',isAdmin, async (req, res) => {
+router.get('/admin/:userId', isAdmin, async (req, res) => {
     try {
         const userId = req.params.userId;
         const users = await User.find();
 
-        res.render('admin', { userId: userId, users: users });
+        res.render('admin', {userId: userId, users: users});
     } catch (error) {
         console.error('Error rendering admin page:', error);
         res.status(500).send('Internal Server Error');
@@ -251,13 +297,13 @@ router.get('/admin/:userId',isAdmin, async (req, res) => {
 
 router.post('/admin/add/:userId', isAdmin, async (req, res) => {
     const adminId = req.params.userId;
-    const { username, password, isAdmin } = req.body;
+    const {username, password, isAdmin} = req.body;
     try {
         const adminUser = await User.findById(adminId);
         if (!adminUser || !adminUser.isAdmin) {
             return res.status(403).send('Forbidden');
         }
-        const newUser = new User({ username, password, isAdmin });
+        const newUser = new User({username, password, isAdmin});
         await newUser.save();
         res.redirect(`/admin/${adminId}`);
     } catch (error) {
@@ -267,21 +313,21 @@ router.post('/admin/add/:userId', isAdmin, async (req, res) => {
 });
 
 router.post('/admin/update/:userId', isAdmin, async (req, res) => {
-    const adminUserId = req.params.userId; 
-    const { updateUserId, username, password, isAdmin } = req.body; 
+    const adminUserId = req.params.userId;
+    const {updateUserId, username, password, isAdmin} = req.body;
 
     if (isAdmin) {
         console.error('Error updating user:');
         res.status(500).send('Error updating user');
     }
     try {
-        const updatedUser = await User.findByIdAndUpdate(updateUserId, { 
-            username: username, 
-            password: password, 
-            isAdmin: isAdmin 
-        }, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(updateUserId, {
+            username: username,
+            password: password,
+            isAdmin: isAdmin
+        }, {new: true});
 
-        res.redirect('/admin/' + adminUserId); 
+        res.redirect('/admin/' + adminUserId);
     } catch (error) {
         console.error('Error updating user:', error);
         res.status(500).send('Error updating user');
@@ -289,7 +335,7 @@ router.post('/admin/update/:userId', isAdmin, async (req, res) => {
 });
 
 
-router.post('/admin/delete/:deleteUserId/:userId',isAdmin,  async (req, res) => {
+router.post('/admin/delete/:deleteUserId/:userId', isAdmin, async (req, res) => {
     const adminId = req.params.userId;
     const userId = req.params.deleteUserId;
     try {
