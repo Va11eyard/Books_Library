@@ -70,7 +70,7 @@ A web application that provides Weather information, a Translator, the The New Y
 - password: Dinmukhammed2207
 
 ## Admin page:
-**In order to get access to the admin page click the button with house icon** 
+**In order to get access to the admin page click the button with house icon.** 
 
 ## Dependencies
 - **Express:** Used for server setup and routing.
@@ -83,7 +83,7 @@ A web application that provides Weather information, a Translator, the The New Y
 - **OpenWeatherMap API** - for weather data.
 - **Google Cloud Translate API** - to translate text into certain languages.
 - **Books API** - the Books API provides information about book reviews and The New York Times Best Sellers lists.
-- **Yandex dictionary** - to get meaning of words in another languages
+- **Yandex dictionary** - to get meaning of words in another languages.
 
 
 ### Author
