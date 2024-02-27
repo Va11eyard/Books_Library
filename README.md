@@ -12,7 +12,7 @@ A web application that provides Weather information, a Translator, the The New Y
 1. Clone the repository:
 
    ```bash
-   git clone `https://github.com/Va11eyard/Weather_site.git`
+   git clone `https://github.com/Va11eyard/Books_Library.git`
 
 2. Navigate to the project directory.
 3. Run `npm install` to install dependencies.
@@ -24,7 +24,7 @@ A web application that provides Weather information, a Translator, the The New Y
 
 ### Structure
 ```
-├── Weather_site/
+├── Books_Library/
 │   ├── node_modules/
 │   ├── client/
 │   │   ├── TranslateClient.js
